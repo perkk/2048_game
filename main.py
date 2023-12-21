@@ -38,7 +38,7 @@ def draw_grid():
             if grid[row][col] != 0:
                 draw_text(str(grid[row][col]), col, row)
 
-def insert_random_tile():
+def insert_rand_tile():
     empty_positions = [(i, j) for i in range(grid_size) for j in range(grid_size) if grid[i][j] == 0]
 
     if empty_positions:
@@ -108,22 +108,22 @@ def handle_input_events():
             if event.key == pygame.K_LEFT:
                 slide_tiles('left')
                 move('left')
-                insert_random_tile()
+                insert_rand_tile()
             elif event.key == pygame.K_RIGHT:
                 slide_tiles('right')
                 move('right')
-                insert_random_tile()
+                insert_rand_tile()
             elif event.key == pygame.K_UP:
                 slide_tiles('up')
                 move('up')
-                insert_random_tile()
+                insert_rand_tile()
             elif event.key == pygame.K_DOWN:
                 slide_tiles('down')
                 move('down')
-                insert_random_tile()
+                insert_rand_tile()
 
-insert_random_tile()
-insert_random_tile()
+insert_rand_tile()
+insert_rand_tile()
 
 while True:
     handle_input_events()
@@ -133,10 +133,10 @@ while True:
 
     if is_game_over():
         font = pygame.font.Font(None, 72)
-        text_surface = font.render("Game Over", True, (255, 0, 0))
+        text_surface = font.render("game over", True, (255, 0, 0))
         text_rect = text_surface.get_rect(center=(screen_width // 2, screen_height // 2))
         screen.blit(text_surface, text_rect)
         pygame.display.flip()
-        pygame.time.wait(2000)
+        pygame.time.wait(1500)
         pygame.quit()
         sys.exit()
