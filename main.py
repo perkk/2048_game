@@ -45,16 +45,53 @@ def insert_rand_tile():
         i, j = random.choice(empty_positions)
         grid[i][j] = random.choice([2, 4])
 
-grid[0][0] = 2
-grid[1][1] = 4
-grid[2][2] = 2
+def move_up():
+    for col in range(grid_size):
+        values = [grid[row][col] for row in range(grid_size) if grid[row][col] != 0]
+        values += [0] * (grid_size - len(values))
+        for row in range(grid_size):
+            grid[row][col] = values[row]
 
-while True:
+def move_down():
+    for col in range(grid_size):
+        values = [grid[row][col] for row in range(grid_size) if grid[row][col] != 0]
+        values = [0] * (grid_size - len(values)) + values
+        for row in range(grid_size):
+            grid[row][col] = values[row]
+
+
+def move_left():
+    for row in range(grid_size):
+        values = [val for val in grid[row] if val != 0]
+        values += [0] * (grid_size - len(values))
+        grid[row][:] = values
+
+def move_right():
+    for row in range(grid_size):
+        values = [val for val in reversed(grid[row]) if val != 0]
+        values += [0] * (grid_size - len(values))
+        grid[row][:] = list(reversed(values))
+
+def handle_input_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                move_up()
+            elif event.key == pygame.K_DOWN:
+                move_down()
+            elif event.key == pygame.K_LEFT:
+                move_left()
+            elif event.key == pygame.K_RIGHT:
+                move_right()
 
+insert_rand_tile()
+insert_rand_tile()
+
+while True:
+    handle_input_events()
     screen.fill(bg_black)
     draw_grid()
     pygame.display.flip()
