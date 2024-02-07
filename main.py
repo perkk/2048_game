@@ -45,30 +45,47 @@ def insert_rand_tile():
         i, j = random.choice(empty_positions)
         grid[i][j] = random.choice([2, 4])
 
+def merge_tiles(row_or_col):
+    for i in range(len(row_or_col) - 1):
+        if row_or_col[i] == row_or_col[i + 1] and row_or_col[i] != 0:
+            row_or_col[i] *= 2
+            row_or_col[i + 1] = 0
+
 def move_up():
     for col in range(grid_size):
-        values = [grid[row][col] for row in range(grid_size) if grid[row][col] != 0]
-        values += [0] * (grid_size - len(values))
+        values = [grid[row][col] for row in range(grid_size)]
+        merge_tiles(values)
+        for i in range(1, grid_size):
+            if values[i] != 0:
+                for j in range(i, 0, -1):
+                    if values[j - 1] == 0:
+                        values[j - 1], values[j] = values[j], values[j - 1]
         for row in range(grid_size):
             grid[row][col] = values[row]
 
 def move_down():
     for col in range(grid_size):
-        values = [grid[row][col] for row in range(grid_size) if grid[row][col] != 0]
-        values = [0] * (grid_size - len(values)) + values
+        values = [grid[row][col] for row in range(grid_size)]
+        merge_tiles(values)
+        for i in range(grid_size - 1, -1, -1):
+            if values[i] != 0:
+                for j in range(i, grid_size - 1):
+                    if values[j + 1] == 0:
+                        values[j + 1], values[j] = values[j], values[j + 1]
         for row in range(grid_size):
             grid[row][col] = values[row]
-
 
 def move_left():
     for row in range(grid_size):
         values = [val for val in grid[row] if val != 0]
+        merge_tiles(values)
         values += [0] * (grid_size - len(values))
         grid[row][:] = values
 
 def move_right():
     for row in range(grid_size):
         values = [val for val in reversed(grid[row]) if val != 0]
+        merge_tiles(values)
         values += [0] * (grid_size - len(values))
         grid[row][:] = list(reversed(values))
 
